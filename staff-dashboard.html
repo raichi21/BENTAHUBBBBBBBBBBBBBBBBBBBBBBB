@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard - BentaHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="global.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="staff.css">
+</head>
+<body>
+    <div class="dashboard">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo"><i class="fas fa-user-tie"></i></div>
+                <div class="sidebar-header-text">
+                    <h4 class="sidebar-title">BentaHub</h4>
+                    <p class="sidebar-subtitle">Staff</p>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-group">
+                    <a href="#dashboard" class="sidebar-nav-link active" onclick="switchPage('dashboard', event)">
+                        <i class="fas fa-home sidebar-nav-icon"></i> Dashboard
+                    </a>
+                </div>
+                <div class="sidebar-nav-group">
+                    <div class="sidebar-nav-group-title">Centralized Monitoring</div>
+                    <a href="#monitoring" class="sidebar-nav-link" onclick="switchPage('monitoring', event)">
+                        <i class="fas fa-eye sidebar-nav-icon"></i> Transaction Monitoring
+                    </a>
+                    <a href="#inventory" class="sidebar-nav-link" onclick="switchPage('inventory', event)">
+                        <i class="fas fa-boxes sidebar-nav-icon"></i> Inventory Updating
+                    </a>
+                    <a href="#transactions" class="sidebar-nav-link" onclick="switchPage('transactions', event)">
+                        <i class="fas fa-history sidebar-nav-icon"></i> Transaction History
+                    </a>
+                    <a href="#pickup" class="sidebar-nav-link" onclick="switchPage('pickup', event)">
+                        <i class="fas fa-box sidebar-nav-icon"></i> Payment & Pick-Up
+                    </a>
+                </div>
+                <div class="sidebar-nav-group">
+                    <a href="#" class="sidebar-nav-link" onclick="logout(event)">
+                        <i class="fas fa-sign-out-alt sidebar-nav-icon"></i> Logout
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+        <main class="main-content">
+            <div class="top-bar">
+                <div class="top-bar-left">
+                    <button class="hamburger-menu hidden-tablet-up" onclick="toggleSidebar()">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2 class="page-title" id="pageTitle">Dashboard</h2>
+                </div>
+                <div class="top-bar-right">
+                    <div class="user-info">
+                        <div class="user-avatar" id="userAvatar">S</div>
+                        <div class="user-details"><h4 id="userName">Staff</h4><p id="userRole">Staff Member</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pageContent">
+                <!-- Dashboard -->
+                <div id="dashboard" class="page active">
+                    <div class="page-header">
+                        <h1>Centralized Monitoring Module</h1>
+                        <p>Monitor all sales transactions, inventory levels, and system operations in real-time</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="stat-icon fas fa-cash-register"></i>
+                            <p class="stat-label">Today's Sales</p>
+                            <p class="stat-value" id="todaySalesCount">₱2,450.00</p>
+                        </div>
+                        <div class="stat-card success">
+                            <i class="stat-icon fas fa-shopping-cart"></i>
+                            <p class="stat-label">Transactions</p>
+                            <p class="stat-value" id="totalTransactions">24</p>
+                        </div>
+                        <div class="stat-card warning">
+                            <i class="stat-icon fas fa-exclamation-triangle"></i>
+                            <p class="stat-label">Low Stock Items</p>
+                            <p class="stat-value" id="lowStockAlerts">3</p>
+                        </div>
+                        <div class="stat-card info">
+                            <i class="stat-icon fas fa-clock"></i>
+                            <p class="stat-label">Pending Tasks</p>
+                            <p class="stat-value" id="pendingTasks">7</p>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-header"><h3>Recent System Activity</h3></div>
+                        <div class="section-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr><th>Time</th><th>Activity</th><th>Details</th><th>Status</th></tr>
+                                    </thead>
+                                    <tbody id="activityTable">
+                                        <tr>
+                                            <td>10:30 AM</td>
+                                            <td><span class="badge badge-success">Sale</span></td>
+                                            <td>Transaction #S001 - ₱150.00</td>
+                                            <td><span class="badge badge-success">Completed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>10:15 AM</td>
+                                            <td><span class="badge badge-info">Restock</span></td>
+                                            <td>Rice (1kg) +20 units</td>
+                                            <td><span class="badge badge-success">Completed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>09:45 AM</td>
+                                            <td><span class="badge badge-warning">Low Stock</span></td>
+                                            <td>Canned Goods below threshold</td>
+                                            <td><span class="badge badge-warning">Alert</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Updating -->
+                <div id="inventory" class="page">
+                    <div class="page-header">
+                        <h1>Inventory Updating Module</h1>
+                        <p>Update stock levels and manage inventory quantities</p>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-header">
+                            <h3>Stock Management</h3>
+                            <div class="section-actions">
+                                <button class="btn btn-small btn-primary" onclick="addNewProduct()">
+                                    <i class="fas fa-plus"></i> Add Product
+                                </button>
+                            </div>
+                        </div>
+                        <div class="section-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr><th>Product</th><th>Current Stock</th><th>Min Stock</th><th>Status</th><th>Actions</th></tr>
+                                    </thead>
+                                    <tbody id="inventoryTable">
+                                        <tr>
+                                            <td>Rice (1kg)</td>
+                                            <td><input type="number" value="150" class="stock-input" data-product="rice" onchange="updateStockLevel('rice', this.value)" readonly></td>
+                                            <td>20</td>
+                                            <td><span class="badge badge-success">In Stock</span></td>
+                                            <td>
+                                                <button class="btn btn-small btn-primary" onclick="editStock('rice')">
+                                                    <i class="fas fa-edit"></i> Edit
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Canned Goods</td>
+                                            <td><input type="number" value="8" class="stock-input" data-product="canned" onchange="updateStockLevel('canned', this.value)" readonly></td>
+                                            <td>10</td>
+                                            <td><span class="badge badge-warning">Low Stock</span></td>
+                                            <td>
+                                                <button class="btn btn-small btn-primary" onclick="editStock('canned')">
+                                                    <i class="fas fa-edit"></i> Edit
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bread</td>
+                                            <td><input type="number" value="45" class="stock-input" data-product="bread" onchange="updateStockLevel('bread', this.value)" readonly></td>
+                                            <td>15</td>
+                                            <td><span class="badge badge-success">In Stock</span></td>
+                                            <td>
+                                                <button class="btn btn-small btn-primary" onclick="editStock('bread')">
+                                                    <i class="fas fa-edit"></i> Edit
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Milk</td>
+                                            <td><input type="number" value="2" class="stock-input" data-product="milk" onchange="updateStockLevel('milk', this.value)" readonly></td>
+                                            <td>5</td>
+                                            <td><span class="badge badge-danger">Out of Stock</span></td>
+                                            <td>
+                                                <button class="btn btn-small btn-primary" onclick="editStock('milk')">
+                                                    <i class="fas fa-edit"></i> Edit
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-header"><h3>Recent Stock Updates</h3></div>
+                        <div class="section-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr><th>Time</th><th>Product</th><th>Action</th><th>Quantity</th><th>New Stock</th><th>Staff</th></tr>
+                                    </thead>
+                                    <tbody id="stockUpdatesTable">
+                                        <tr>
+                                            <td>10:30 AM</td>
+                                            <td>Rice (1kg)</td>
+                                            <td><span class="badge badge-success">Restock</span></td>
+                                            <td>+20</td>
+                                            <td>170</td>
+                                            <td>Juan Dela Cruz</td>
+                                        </tr>
+                                        <tr>
+                                            <td>09:45 AM</td>
+                                            <td>Canned Goods</td>
+                                            <td><span class="badge badge-warning">Low Stock Alert</span></td>
+                                            <td>-5</td>
+                                            <td>8</td>
+                                            <td>Maria Santos</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction Monitoring -->
+                <div id="monitoring" class="page">
+                    <div class="page-header">
+                        <h1>Transaction Monitoring Module</h1>
+                        <p>Monitor all sales transactions in real-time. This replaces handwritten logs with digital recording.</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="stat-icon fas fa-cash-register"></i>
+                            <p class="stat-label">Active Transactions</p>
+                            <p class="stat-value" id="activeTransactions">2</p>
+                        </div>
+                        <div class="stat-card success">
+                            <i class="stat-icon fas fa-check-circle"></i>
+                            <p class="stat-label">Completed Today</p>
+                            <p class="stat-value" id="completedToday">24</p>
+                        </div>
+                        <div class="stat-card info">
+                            <i class="stat-icon fas fa-calculator"></i>
+                            <p class="stat-label">Total Sales</p>
+                            <p class="stat-value" id="totalSalesAmount">₱2,450.00</p>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-header">
+                            <h3>Transaction</h3>
+                            <div class="section-actions">
+                                <button class="btn btn-small" onclick="refreshTransactions()">
+                                    <i class="fas fa-sync"></i> Refresh
+                                </button>
+                            </div>
+                        </div>
+                        <div class="section-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr><th>Time</th><th>Transaction ID</th><th>Cashier</th><th>Items</th><th>Total</th><th>Status</th><th>Actions</th></tr>
+                                    </thead>
+                                    <tbody id="liveTransactionsTable">
+                                        <tr>
+                                            <td>11:45 AM</td>
+                                            <td>TXN-2024-001</td>
+                                            <td>Maria Santos</td>
+                                            <td>3 items</td>
+                                            <td>₱150.00</td>
+                                            <td><span class="badge badge-success">Completed</span></td>
+                                            <td><button class="btn btn-small" onclick="viewTransaction('TXN-2024-001')"><i class="fas fa-eye"></i></button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>11:42 AM</td>
+                                            <td>TXN-2024-002</td>
+                                            <td>Juan Dela Cruz</td>
+                                            <td>5 items</td>
+                                            <td>₱285.50</td>
+                                            <td><span class="badge badge-info">In Progress</span></td>
+                                            <td><button class="btn btn-small" onclick="viewTransaction('TXN-2024-002')"><i class="fas fa-eye"></i></button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transaction History -->
+                <div id="transactions" class="page">
+                    <div class="page-header">
+                        <h1>Transaction History Module</h1>
+                        <p>View all transaction records, verify details, and generate digital or printed receipts</p>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-header">
+                            <h3>Transaction Records</h3>
+                            <div class="section-actions">
+                                <input type="date" id="historyDateFilter" style="margin-right: var(--spacing-sm);">
+                                <button class="btn btn-small" onclick="filterTransactions()">
+                                    <i class="fas fa-filter"></i> Filter
+                                </button>
+                                <button class="btn btn-small btn-primary" onclick="exportTransactions()">
+                                    <i class="fas fa-download"></i> Export
+                                </button>
+                            </div>
+                        </div>
+                        <div class="section-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr><th>Date</th><th>Transaction ID</th><th>Cashier</th><th>Items</th><th>Total</th><th>Payment</th><th>Actions</th></tr>
+                                    </thead>
+                                    <tbody id="transactionHistoryTable">
+                                        <tr>
+                                            <td>2024-03-22</td>
+                                            <td>TXN-2024-001</td>
+                                            <td>Maria Santos</td>
+                                            <td>3 items</td>
+                                            <td>₱150.00</td>
+                                            <td>Cash</td>
+                                            <td>
+                                                <button class="btn btn-small" onclick="viewReceipt('TXN-2024-001')">
+                                                    <i class="fas fa-receipt"></i>
+                                                </button>
+                                                <button class="btn btn-small" onclick="printReceipt('TXN-2024-001')">
+                                                    <i class="fas fa-print"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2024-03-22</td>
+                                            <td>TXN-2024-002</td>
+                                            <td>Juan Dela Cruz</td>
+                                            <td>5 items</td>
+                                            <td>₱285.50</td>
+                                            <td>GCash</td>
+                                            <td>
+                                                <button class="btn btn-small" onclick="viewReceipt('TXN-2024-002')">
+                                                    <i class="fas fa-receipt"></i>
+                                                </button>
+                                                <button class="btn btn-small" onclick="printReceipt('TXN-2024-002')">
+                                                    <i class="fas fa-print"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment & Pick-Up Module -->
+                <div id="pickup" class="page">
+                    <div class="page-header">
+                        <h1>Payment & Pick-Up Module</h1>
+                        <p>Handle online payments, confirm transactions, and manage customer pickups</p>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="stat-icon fas fa-shopping-cart"></i>
+                            <p class="stat-label">Pending Pickups</p>
+                            <p class="stat-value" id="pendingPickups">3</p>
+                        </div>
+                        <div class="stat-card warning">
+                            <i class="stat-icon fas fa-clock"></i>
+                            <p class="stat-label">Awaiting Payment</p>
+                            <p class="stat-value" id="awaitingPayment">2</p>
+                        </div>
+                        <div class="stat-card success">
+                            <i class="stat-icon fas fa-check-circle"></i>
+                            <p class="stat-label">Ready for Pickup</p>
+                            <p class="stat-value" id="readyForPickup">5</p>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-header">
+                            <h3>Payment Confirmations</h3>
+                            <div class="section-actions">
+                                <button class="btn btn-small" onclick="refreshPayments()">
+                                    <i class="fas fa-sync"></i> Refresh
+                                </button>
+                            </div>
+                        </div>
+                        <div class="section-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr><th>Order ID</th><th>Customer</th><th>Payment Method</th><th>Amount</th><th>Status</th><th>Actions</th></tr>
+                                    </thead>
+                                    <tbody id="paymentTable">
+                                        <tr>
+                                            <td>ORD-2024-001</td>
+                                            <td>Anna Reyes</td>
+                                            <td>GCash</td>
+                                            <td>₱450.00</td>
+                                            <td><span class="badge badge-warning">Pending</span></td>
+                                            <td>
+                                                <button class="btn btn-small btn-success" onclick="confirmPayment('ORD-2024-001')">
+                                                    <i class="fas fa-check"></i> Confirm
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>ORD-2024-002</td>
+                                            <td>Carlos Mendoza</td>
+                                            <td>PayMaya</td>
+                                            <td>₱320.50</td>
+                                            <td><span class="badge badge-success">Confirmed</span></td>
+                                            <td>
+                                                <button class="btn btn-small btn-primary" onclick="markReady('ORD-2024-002')">
+                                                    <i class="fas fa-box"></i> Ready
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-header">
+                            <h3>Pickup Queue</h3>
+                        </div>
+                        <div class="section-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Ready Time</th><th>Status</th><th>Actions</th></tr>
+                                    </thead>
+                                    <tbody id="pickupTable">
+                                        <tr>
+                                            <td>ORD-2024-003</td>
+                                            <td>Maria Santos</td>
+                                            <td>2 items</td>
+                                            <td>10:30 AM</td>
+                                            <td><span class="badge badge-info">Ready</span></td>
+                                            <td>
+                                                <button class="btn btn-small btn-success" onclick="completePickup('ORD-2024-003')">
+                                                    <i class="fas fa-check-double"></i> Complete
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>ORD-2024-004</td>
+                                            <td>Juan Dela Cruz</td>
+                                            <td>4 items</td>
+                                            <td>11:15 AM</td>
+                                            <td><span class="badge badge-warning">Preparing</span></td>
+                                            <td>
+                                                <button class="btn btn-small btn-primary" onclick="notifyCustomer('ORD-2024-004')">
+                                                    <i class="fas fa-bell"></i> Notify
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Product</h2>
+                <button class="modal-close" onclick="closeModal('addProductModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addProductForm" onsubmit="saveNewProduct(event)">
+                    <div class="form-group">
+                        <label for="productName">Product Name</label>
+                        <input type="text" id="productName" placeholder="e.g., Rice (1kg)" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="currentStock">Current Stock</label>
+                        <input type="number" id="currentStock" placeholder="0" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="minStock">Minimum Stock Level</label>
+                        <input type="number" id="minStock" placeholder="0" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productCategory">Category</label>
+                        <select id="productCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="staples">Staples</option>
+                            <option value="canned">Canned Goods</option>
+                            <option value="dairy">Dairy</option>
+                            <option value="snacks">Snacks</option>
+                            <option value="beverages">Beverages</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('addProductModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="document.getElementById('addProductForm').submit()">Add Product</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="mockData.js"></script>
+    <script src="staff.js"></script>
+</body>
+</html>
